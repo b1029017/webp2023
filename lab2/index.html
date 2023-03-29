@@ -5,38 +5,18 @@
      class="blockquote text-newrap">
 </div>
 <script>
-    var container = document.getElementById('container');
-  window.onload = function() {
-      container.textContent =add_new_char();
-      }
- 
- function add_new_chars(x,b=true){
-   var n=x;
-   if(b){
-     n=Math.floor(Math.random()*x)+1;
-   }
-   var str='';
-   for(let i=0; i<n; i++){
-     str+= String.fromCharCode(97+Math.floor(math.random()*26));
-   }
-   return str;
- };
+  var d=["資工系","資工系","資工系","資工系","資工系","資工系"];
+  var c=["物件導向軟體設計","計算機網路實驗","作業系統實務","生物統計","通訊系統","軟硬體專題(2)"]:
+  var t=["黃崇源","李春良","張哲維","陳光武","陳仁暉","魏志達"];
+  function addNewData(){
+    var myTable= document.getElementById("CSIE");
+    var rowCount=c.length;
+    var cellCount=myTable.rows[0].cells.length;
+    for(var i=0; i<rowCount; i++){
+      var row= myTable.
+    }
+  }
   
-  var counter=0;
-  window.addEventListener("keyup",function(e){
-    var firstone= container.textContent.substring(0,1);
-    if(e.key==firstone){
-      container.textContent= container.textContent.substring(1, container.textContent.length);
-    }
-    else{
-      container.textContent+=e.key;
-      if(counter++ >=2){
-        container.textContent+=add_new_chars(6, flase);
-        counter=0;
-      }
-    }
-   container.textContent+=add_new_chars(3);
-  });
 </script>
 </body>
 
