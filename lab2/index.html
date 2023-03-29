@@ -1,9 +1,3 @@
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
-<body>
-<div id="container" tabindex="0"
-     class="blockquote text-newrap">
-</div>
   <h1>資工選課表</h1>
 <table id="csie" class="table table-striped table-hover">
   <tr>
@@ -13,18 +7,44 @@
   </tr>
 </table>
   <button onclick="addNewData()">addNewData</button>
-<script>
+  <button onclick="delOldData()">delOldData</button>
+
+<style>
+  h1{
+    padding:10px;
+}
+table {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 2px solid #ddd;
+    padding: 6px;
+    }
+ tr:nth-child(even){background-color: #f2f2f2;}
+ tr:hover {background-color: #ddd;}
+th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: middle;
+    background-color: #689C97;
+    color: white;
+}
+</style>
   
-  var d=["資工系","資工系","資工系","資工系","資工系","資工系"];
-  var c=["物件導向軟體設計","計算機網路實驗","作業系統實務","生物統計","通訊系統","軟硬體專題(2)"]:
-  var t=["黃崇源","李春良","張哲維","陳光武","陳仁暉","魏志達"];
+<script>
+  var d =["資工系","資工系","資工系","資工系","資工系","資工系"];
+  var c =["物件導向軟體設計","計算機網路實驗","作業系統實務","生物統計","通訊系統","軟硬體專題(2)"];
+  var t =["黃崇源","李春良","張哲維","陳光武","陳仁暉","魏志達"];
   
   function addNewData(){
     var myTable= document.getElementById("csie");
     var rowCount=c.length;
     var cellCount=myTable.rows[0].cells.length;
     for(var i=0; i<rowCount; i++){
-      var row= myTable.inserRow(-1);
+      var row= myTable.insertRow(-1);
       row.insertCell(0).innerHTML=d[i];
       row.insertCell(1).innerHTML=c[i];
       row.insertCell(2).innerHTML=t[i];
@@ -32,6 +52,13 @@
     }
   }
   
+ function delOldData(){
+   var myTable = document.getElementById ("csie");
+   var rowCount = myTable.rows.length;
+   var i =rowCount-1;
+   if(i>0)
+      myTable.deleteRow(-1);
+}
+  
 </script>
-</body>
 
