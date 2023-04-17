@@ -1,59 +1,83 @@
+<!DOCTYPE html>
 <html>
-<head>
-<script>
-    var url = "https://api.unsplash.com/photos?client_id=812193ef71ca946e361ed541979a0cfd91e9419a19235fd05f51ea14233f020a&per_page=30";
-    var xhr = new XMLHttpRequest();
-	var dataset;
-    xhr.open("GET", url, true);
-    xhr.send();
-    xhr.onreadystatechange = function(){
-        if(this.readyState == 4 && this.status == 200)
-            dataset = JSON.parse(this.responseText);
-	    console.log(dataset);
-    };
-    function getimg() {
-        var myGallery = document.getElementById("gallery");
-        dataset.forEach(function(data, index) {
-            var image = document.createElement("img");
-            image.src = data['urls']['small'];
-            myGallery.appendChild(image);
+  <head>
+    <meta charset="UTF-8">
+    <title>景點觀光展覽資訊</title>
+  </head>
+  <body>
+    <h1>景點觀光展覽資訊</h1>
+    <input type="text" id="keywd" onchange="searchf(0)">
+    <table id="csie" class="table table-striped table-hover">
+        <tr>
+          <th>名稱</th>
+          <th>地點</th>
+          <th>票價</th>
+        </tr>
+    </table>
+    <div id="pages"></div>
+    <div id = "total"> </div>
+    <button onclick="searchf(-1)">上一頁</button>
+    <button onclick="searchf(1)">下一頁</button>
+    <script>
+      var openUrl = "https://cloud.culture.tw/frontsite/trans/SearchShowAction.do?method=doFindTypeJ&category=6"
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', openUrl, true);
+      xhr.send();
+      xhr.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status == 200){
+          dataset = JSON.parse(this.responseText);  
+          addNewData(dataset); 
+        }
+      };
+      function delOldData(){
+         var myTable = document.getElementById ("csie");
+         var rowCount = myTable.rows.length;
+         var i =rowCount-1;
+         if(i>0)
+         myTable.deleteRow(-1);
+       }
+      var curpage = 1;
+      var num = 10;
+      function addNewData(dataset){
+        var myTable = document.getElementById("csie");
+        var num_s = (curpage - 1) * num;
+        var num_e = num_s + num;
+        if(num_e > dataset.length){
+          num_e = dataset.length;
+        }
+        for(var i = num_s; i < num_e; i++){
+          var row = myTable.insertRow(-1);
+          row.insertCell(0).innerHTML = dataset[i]['title'];
+          row.insertCell(1).innerHTML = dataset[i]['showInfo'][0]['location'];
+          row.insertCell(2).innerHTML = dataset[i]['showInfo'][0]['price'];
+        }
+        var pages = document.getElementById("pages");
+        pages.innerText = curpage + "/" + Math.ceil(dataset.length / num);
+        var total = document.getElementById("total");
+        //total index
+        total.innerText = "總共" + dataset.length + "筆資料";
+    }
+      function searchf(d) {
+        var ipt = document.getElementById("keywd").value;
+        var filter = dataset.filter(function(item) {
+            return item.title.includes(ipt) || item.showInfo[0].location.includes(ipt) || item.showInfo[0].price.includes(ipt);
         });
-    }
-</script>
-<style>
-    .gallery {
-        --g: 6px; /* the gap*/
         
-        display: grid;
-        width: 1200px; /*the size*/
-        aspect-ratio: 1;
-        grid: auto-flow 1fr/repeat(3,1fr);
-        gap: var(--g);
-    }
-    .gallery img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        filter: grayscale();
-        cursor: pointer;
-        transition: .5s
-    }
-    .gallery img:hover {
-        filter: grayscale(0);
+
+        var talpage = Math.ceil(filter.length / num);
+        curpage += d;
+        if(curpage < 1){
+          curpage = 1;
+        } else if(curpage > talpage){
+          curpage = talpage;
+        } else {
+          var myTable = document.getElementById("csie");
+            for(var i = 0; i < num; i++){
+              delOldData();
+            }
+          addNewData(filter);
         }
-    .gallery img:nth-child(2) {
-        grid-area: 1/2/span 2/span 2;
-        clip-path: polygon(0 0,100% 0,100% 100%,calc(50% + var(--g)/4) 100%,0 calc(50% - var(--g)/4))
-        }
-    .gallery img:nth-child(3) {
-        grid-area: 2/1/span 2/span 2;
-        clip-path: polygon(0 0,calc(50% - var(--g)/4) 0,100% calc(50% + var(--g)/4),100% 100%,0 100%);    
-    }
-</style>
-</head>
-<body>
-<h6> Click the button to Get IMG <h6>
-<button onclick="getimg()">Get IMG</button>
-<div id='gallery' class="gallery"></div>
+     }
+</script>
 </body>
 </html>
